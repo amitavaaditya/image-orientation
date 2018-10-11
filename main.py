@@ -42,10 +42,11 @@ def predict():
             image = flask.request.files["image"].read()
             image = Image.open(io.BytesIO(image))
             data["predictions"] = []
-            results, _ = make_prediction(image)
+            results, final_label = make_prediction(image)
             for label, probability in results:
                 r = {'label': label, 'probability': float(probability)}
                 data['predictions'].append(r)
+                data['final_label'] = final_label
             data["success"] = True
     return flask.jsonify(data)
 
