@@ -4,6 +4,7 @@ import numpy as np
 import flask
 from PIL import Image
 import io
+import os
 
 
 app = flask.Flask(__name__)
@@ -73,8 +74,11 @@ def rotate_image(image, rotation):
 def model_load():
     global model
     model_src = 'model.h5'
+    if os.path.exists(model_src):
+        print('Model not found')
     model = load_model(model_src)
     model._make_predict_function()
+    print('Model loaded')
 
 
 if __name__ == '__main__':
