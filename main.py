@@ -35,6 +35,11 @@ def decode_prediction(predictions):
     return results, final_label
 
 
+@app.route("/")
+def hello():
+    return 'Hello World!'
+
+
 @app.route("/predict", methods=['POST'])
 def predict():
     data = {"success": False}
@@ -74,13 +79,11 @@ def rotate_image(image, rotation):
 def model_load():
     global model
     model_src = 'model.h5'
-    if os.path.exists(model_src):
-        print('Model not found')
     model = load_model(model_src)
     model._make_predict_function()
-    print('Model loaded')
 
 
 if __name__ == '__main__':
     model_load()
-    app.run()
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='localhost', port=port)
