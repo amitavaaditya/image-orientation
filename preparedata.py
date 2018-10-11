@@ -1,6 +1,6 @@
 import os
 import shutil
-import cv2
+from PIL import Image
 import random
 
 
@@ -23,10 +23,7 @@ def prepare_directories(directories):
 
 
 def rotate_image(image, rotation):
-    rows, cols, _ = image.shape
-    center = (rows // 2, cols // 2)
-    m = cv2.getRotationMatrix2D(center, rotation, 1)
-    rotated_image = cv2.warpAffine(image, m, (cols, rows))
+    rotated_image = image.rotate(rotation)
     return rotated_image
 
 
@@ -35,21 +32,23 @@ def rotate_and_save_images(directories, subdirectories, subset, rotation):
         src = os.path.join(directories['original_dataset'],
                            subdirectory,
                            '{}_0001.jpg'.format(subdirectory))
-        image = cv2.imread(src)
+        image = Image.open(src)
         rotated_image = rotate_image(image, rotation)
-        cv2.imwrite(os.path.join(directories['{}_{}'.format(subset,
-                                                            rotation)],
-                                 '{}_0001.jpg'.format(subdirectory)),
-                    rotated_image)
+        rotated_image.save(os.path.join(directories['{}_{}'.format(subset,
+                                                                   rotation)],
+                                        '{}_0001.jpg'.format(subdirectory)))
 
 
 def train_validation_test_split(directories, subdirectories):
     for rotation in (0, 90, 180, 270):
         random.seed(rotation)
         random.shuffle(subdirectories)
-        rotate_and_save_images(directories, subdirectories[:1000], 'validation', rotation)
-        rotate_and_save_images(directories, subdirectories[1000:2000], 'test', rotation)
-        rotate_and_save_images(directories, subdirectories[2000:], 'train', rotation)
+        rotate_and_save_images(directories, subdirectories[:1000],
+                               'validation', rotation)
+        rotate_and_save_images(directories, subdirectories[1000:2000],
+                               'test', rotation)
+        rotate_and_save_images(directories, subdirectories[2000:],
+                               'train', rotation)
 
 
 def prepare_custom_dataset():
