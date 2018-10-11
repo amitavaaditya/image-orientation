@@ -6,8 +6,8 @@ from PIL import Image
 
 
 IMAGE_PATH = 'final/test/0/Deniz_Baykal_0001.jpg'
-KERAS_REST_API_PREDICT_URL = "http://localhost:5000/predict"
-KERAS_REST_API_CORRECT_URL = "http://localhost:5000/correct"
+KERAS_REST_API_PREDICT_URL = "https://cryptic-atoll-59558.herokuapp.com/predict"
+KERAS_REST_API_CORRECT_URL = "https://cryptic-atoll-59558.herokuapp.com/correct"
 
 
 class ModelTest(unittest.TestCase):
