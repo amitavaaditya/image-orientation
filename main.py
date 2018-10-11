@@ -42,6 +42,8 @@ def hello():
 
 @app.route("/predict", methods=['POST'])
 def predict():
+    if not model:
+        model_load()
     data = {"success": False}
     if flask.request.method == 'POST':
         if flask.request.files.get("image"):
@@ -59,6 +61,8 @@ def predict():
 
 @app.route("/correct", methods=['POST'])
 def correct():
+    if not model:
+        model_load()
     if flask.request.method == 'POST':
         if flask.request.files.get("image"):
             image = flask.request.files["image"].read()
